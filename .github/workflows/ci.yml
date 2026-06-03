@@ -62,7 +62,7 @@ jobs:
         run: docker logs nginx-test
 
       - name: Test the application
-        run: curl -I http://localhost:8080
+        run: sleep 10 && curl -I http://localhost:8080
 
       - name: pytest install
         run: pip install pytest pytest-html
