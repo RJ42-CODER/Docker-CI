@@ -10,16 +10,47 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Build the Docker image
         run: docker build -f Dockerfile.yaml -t my-nginx .
 
       - name: Run the Docker container
-        run : docker run -d -p 8080:80 my-nginx
+        run: docker run -d -p 8080:80 my-nginx
+
+  logs:
+    needs: docker-build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build the Docker image
+        run: docker build -f Dockerfile.yaml -t my-nginx .
+
+      - name: Run the Docker container
+        run: docker run -d --name nginx-test -p 8080:80 my-nginx
 
       - name: Check if running
         run: docker ps
+
+      - name: Check logs
+        run: docker logs nginx-test
+
+  deploy:
+    needs: logs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build the Docker image
+        run: docker build -f Dockerfile.yaml -t my-nginx .
+
+      - name: Run the Docker container
+        run: docker run -d --name nginx-test -p 8080:80 my-nginx
 
       - name: Test the application
         run: curl -I http://localhost:8080
