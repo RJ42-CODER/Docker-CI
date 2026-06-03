@@ -52,6 +52,15 @@ jobs:
       - name: Run the Docker container
         run: docker run -d --name nginx-test -p 8080:80 my-nginx
 
+      - name: wait for application
+        run: sleep 10
+
+      - name: Check containers
+        run: docker ps -a
+
+      - name: Container logs
+        run: docker logs nginx-test
+
       - name: Test the application
         run: curl -I http://localhost:8080
 
