@@ -54,3 +54,6 @@ jobs:
 
       - name: Test the application
         run: curl -I http://localhost:8080
+
+      - name: Pytest report
+        run: pytest --html=reports.html
